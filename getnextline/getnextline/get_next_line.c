@@ -11,11 +11,12 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
-	static char *whatsleft;
-	char		*l; // l = line
+	static char	*whatsleft;
+	char		*l;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -23,6 +24,11 @@ char	*get_next_line(int fd)
 	if (!whatsleft)
 		return (NULL);
 	l = extract(whatsleft);
+	if (!l)
+	{
+		free(whatsleft);
+		return (NULL);
+	}
 	whatsleft = update_whatsleft(whatsleft);
 	return (l);
 }
@@ -31,9 +37,9 @@ char	*read_file(int fd, char *whatsleft)
 {
 	char	*buffer;
 	char	*temp;
-	int		b; //bytes read
+	int		b;
 
-	buffer = malloc(BUFFER_SIZE + 1)
+	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
 	b = 1;
@@ -56,7 +62,7 @@ char	*read_file(int fd, char *whatsleft)
 
 char	*extract(char *whatsleft)
 {
-	char	*l; // l:line
+	char	*l;
 	int		i;
 
 	i = 0;
@@ -72,7 +78,7 @@ char	*extract(char *whatsleft)
 
 char	*update_whatsleft(char *whatsleft)
 {
-	char	*new; //new whatsleft
+	char	*new;
 	int		i;
 
 	i = 0;
